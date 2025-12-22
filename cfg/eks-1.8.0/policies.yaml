@@ -1,6 +1,6 @@
 ---
 controls:
-version: "eks-1.7.0"
+version: "eks-1.8.0"
 id: 4
 text: "Policies"
 type: "policies"
@@ -111,7 +111,6 @@ groups:
           if [ "$default_sa_count" -gt 0 ]; then
             echo "default_sa_not_auto_mounted"
           fi
-
           pods_using_default_sa=$(kubectl get pods --all-namespaces -o json | jq '
             [.items[] | select(.spec.serviceAccountName == "default")] | length')
           if [ "$pods_using_default_sa" -gt 0 ]; then
@@ -128,7 +127,7 @@ groups:
           access to the Kubernetes API server.
           Modify the configuration of each default service account to include this value
           automountServiceAccountToken: false
-
+          
           Automatic remediation for the default account:
           kubectl patch serviceaccount default -p
           $'automountServiceAccountToken: false'
@@ -170,6 +169,46 @@ groups:
         type: "manual"
         remediation: |
           Where possible, remove the impersonate, bind and escalate rights from subjects.
+        scored: false
+      
+      - id: 4.1.9
+        text: "Minimize access to create PersistentVolume objects (Manual)"
+        type: "manual"
+        remediation: |
+          Review the RBAC rules in the cluster and identify users, groups, or service accounts
+          with create permissions on PersistentVolume resources.
+          Where possible, remove or restrict create access to PersistentVolume objects to
+          trusted administrators only.
+        scored: false
+
+      - id: 4.1.10
+        text: "Minimize access to the proxy sub-resource of Node objects (Manual)"
+        type: "manual"
+        remediation: |
+          Review RBAC roles and bindings in the cluster to identify users, groups,
+          or service accounts with access to the proxy sub-resource of Node objects.
+          Where possible, remove or restrict access to the node proxy sub-resource
+          to trusted administrators only.
+        scored: false
+
+      - id: 4.1.11
+        text: "Minimize access to webhook configuration objects (Manual)"
+        type: "manual"
+        remediation: |
+          Review RBAC roles and bindings in the cluster to identify users, groups,
+          or service accounts with access to validatingwebhookconfigurations or
+          mutatingwebhookconfigurations objects. Where possible, remove or restrict
+          access to these webhook configuration objects to trusted administrators only.
+        scored: false
+
+      - id: 4.1.12
+        text: "Minimize access to the service account token creation (Manual)"
+        type: "manual"
+        remediation: |
+          Review RBAC roles and bindings in the cluster to identify users, groups,
+          or service accounts with access to create the token sub-resource of
+          serviceaccount objects. Where possible, remove or restrict access to
+          token creation to trusted administrators only.
         scored: false
 
   - id: 4.2
