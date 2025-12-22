@@ -532,6 +532,11 @@ func getPlatformBenchmarkVersion(platform Platform) string {
 		default:
 			return "eks-1.5.0"
 		}
+<<<<<<< HEAD
+=======
+
+		
+>>>>>>> 84ae139b8a627b8917d1c4039daee2d9598dcea0
 	case "aks":
 		return "aks-1.7"
 	case "gke":

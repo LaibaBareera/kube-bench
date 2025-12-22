@@ -111,7 +111,10 @@ groups:
           if [ "$default_sa_count" -gt 0 ]; then
             echo "default_sa_not_auto_mounted"
           fi
+<<<<<<< HEAD
 
+=======
+>>>>>>> 84ae139b8a627b8917d1c4039daee2d9598dcea0
           pods_using_default_sa=$(kubectl get pods --all-namespaces -o json | jq '
             [.items[] | select(.spec.serviceAccountName == "default")] | length')
           if [ "$pods_using_default_sa" -gt 0 ]; then
@@ -128,7 +131,11 @@ groups:
           access to the Kubernetes API server.
           Modify the configuration of each default service account to include this value
           automountServiceAccountToken: false
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 84ae139b8a627b8917d1c4039daee2d9598dcea0
           Automatic remediation for the default account:
           kubectl patch serviceaccount default -p
           $'automountServiceAccountToken: false'
