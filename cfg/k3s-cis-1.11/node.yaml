@@ -210,15 +210,19 @@ groups:
       - id: 4.2.4
         text: "Verify that if defined, the --read-only-port argument is set to 0 (Automated)"
         audit: |
-          journalctl -m -u k3s -u k3s-agent | grep 'Running kubelet' | tail -n1 | grep -o -- "--read-only-port=0"
+          journalctl -m -u k3s -u k3s-agent | grep 'Running kubelet' | tail -n1
         audit_config: "/bin/sh -c 'if test -e $kubeletconf; then /bin/cat $kubeletconf; fi' "
         tests:
+          bin_op: or
           test_items:
             - flag: "--read-only-port"
               path: '{.readOnlyPort}'
               compare:
                 op: eq
                 value: 0
+            - flag: "--read-only-port"
+              path: '{.readOnlyPort}'
+              set: false
         remediation: |
           By default, K3s sets the --read-only-port to 0. If you have set this to a different value, you
           should set it back to 0. If using the K3s config file /etc/rancher/k3s/config.yaml, remove any lines similar to below.
